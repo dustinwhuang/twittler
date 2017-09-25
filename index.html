@@ -5,22 +5,32 @@
     <script src="data_generator.js"></script>
 
     <style>
+      #tweets {
+        padding: 0;
+        list-style-type: none;
+        font-family: "Verdana";
+        font-size: 0.8em;
+      }
       #wrap {
         border-radius: 5px;
         border: 1px solid;
+        border-color: gray;
+        padding: 2px;
+        margin: 1px;
       }
-      .line {
+      #user {
+        color: blue;
         display: inline-block;
       }
-      .user {
-        color: blue;
-      }
       #tweet-msg {
-        
+        display: inline-block;
       }
       #tweet-time {
         font-size: 70%;
         text-align: right;
+      }
+      .back {
+        text-align: right;        
       }
     </style>
   </head>
@@ -30,15 +40,15 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('<button class="new">New Tweets</button>');
-        $body.append('<p id="tweets"></p>')
+        $body.append('<ul id="tweets"></ul>')
 
         var index = streams.home.length - 1;
         var lastIndex = index + 1;
         while(index >= 0){
           var tweet = streams.home[index];
-          var $wrap = $('<div id="wrap"></div>');
-          var $user = $('<div id="' + tweet.user + '" class="user line"></div>');
-          var $tweet = $('<div id="tweet-msg" class="line"></div>');
+          var $wrap = $('<li id="wrap" class="' + tweet.user + '"></li>');
+          var $user = $('<div id="user" class="' + tweet.user + '"></div>');
+          var $tweet = $('<div id="tweet-msg"></div>');
           var $time = $('<div id="tweet-time"></div>');
           $user.text('@' + tweet.user + ': ');
           $tweet.text(tweet.message);
@@ -46,18 +56,21 @@
           $wrap.append($user);
           $wrap.append($tweet);
           $wrap.append($time);
-          $('p').append($wrap);
+          $('ul').append($wrap);
           index -= 1;
         }
 
+        // Show new tweets
         $(this).on('click', '.new', function() {
+          $('li').show();
+          $('.back').remove();
           var streamLen = streams.home.length - 1;
           var tempIndex = index;
           while(lastIndex < streamLen){
             var tweet = streams.home[lastIndex];
-            var $wrap = $('<div id="wrap"></div>');
-            var $user = $('<div id="' + tweet.user + '" class="user line"></div>');
-            var $tweet = $('<div id="tweet-msg" class="line"></div>');
+            var $wrap = $('<li id="wrap" class="' + tweet.user + '"></li>');
+            var $user = $('<div id="user" class="' + tweet.user + '"></div>');
+            var $tweet = $('<div id="tweet-msg"></div>');
             var $time = $('<div id="tweet-time"></div>');
             $user.text('@' + tweet.user + ': ');
             $tweet.text(tweet.message);
@@ -65,9 +78,22 @@
             $wrap.append($user);
             $wrap.append($tweet);
             $wrap.append($time);
-            $('p').find('div').first().before($wrap);
+            $('ul').find('li').first().before($wrap);
             lastIndex += 1;
           }
+        });
+
+        // Filter user tweets
+        $(this).on('click', '#user', function() {
+          var users = 'li:not(.' + $(this).attr('class') + ')';
+          $(users).hide();
+          $('ul').before('<button class="back">Back</button>')
+        });
+
+        // Unhide tweets
+        $(this).on('click', '.back', function() {
+          $('li').show();
+          $('.back').remove();
         });
       });
 
