@@ -3,23 +3,72 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+
+    <style>
+      #wrap {
+        border-radius: 5px;
+        border: 1px solid;
+      }
+      .line {
+        display: inline-block;
+      }
+      .user {
+        color: blue;
+      }
+      #tweet-msg {
+        
+      }
+      #tweet-time {
+        font-size: 70%;
+        text-align: right;
+      }
+    </style>
   </head>
   <body>
     <script>
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
+        $body.html('<button class="new">New Tweets</button>');
+        $body.append('<p id="tweets"></p>')
 
         var index = streams.home.length - 1;
+        var lastIndex = index + 1;
         while(index >= 0){
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          var $wrap = $('<div id="wrap"></div>');
+          var $user = $('<div id="' + tweet.user + '" class="user line"></div>');
+          var $tweet = $('<div id="tweet-msg" class="line"></div>');
+          var $time = $('<div id="tweet-time"></div>');
+          $user.text('@' + tweet.user + ': ');
+          $tweet.text(tweet.message);
+          $time.text(tweet.created_at);
+          $wrap.append($user);
+          $wrap.append($tweet);
+          $wrap.append($time);
+          $('p').append($wrap);
           index -= 1;
         }
 
+        $(this).on('click', '.new', function() {
+          var streamLen = streams.home.length - 1;
+          var tempIndex = index;
+          while(lastIndex < streamLen){
+            var tweet = streams.home[lastIndex];
+            var $wrap = $('<div id="wrap"></div>');
+            var $user = $('<div id="' + tweet.user + '" class="user line"></div>');
+            var $tweet = $('<div id="tweet-msg" class="line"></div>');
+            var $time = $('<div id="tweet-time"></div>');
+            $user.text('@' + tweet.user + ': ');
+            $tweet.text(tweet.message);
+            $time.text(tweet.created_at);
+            $wrap.append($user);
+            $wrap.append($tweet);
+            $wrap.append($time);
+            $('p').find('div').first().before($wrap);
+            lastIndex += 1;
+          }
+        });
       });
 
     </script>
