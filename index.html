@@ -6,36 +6,41 @@
 
     <style>
       body {
-        margin: auto;
+        margin:auto;
         max-width: 750px;
         padding: 10px;
       }
+      h1 {
+        text-align:center;
+        font-family: "Courier New";
+        color:gray;
+      }
       #tweets {
         padding: 0;
-        list-style-type: none;
+        list-style-type:none;
         font-family: "Verdana";
         font-size: 0.8em;
       }
       li {
         border-radius: 5px;
         border: 1px solid;
-        border-color: gray;
+        border-color:lightgray;
         padding: 2px;
         margin: 1px;
       }
       .user {
-        color: blue;
-        display: inline-block;
+        color:blue;
+        display:inline;
       }
       .tweet-msg {
-        display: inline-block;
+        display:inline;
       }
       .tweet-time {
         font-size: 70%;
-        text-align: right;
+        text-align:right;
       }
       #back {
-        float: right;        
+        float:right;        
       }
     </style>
   </head>
@@ -44,7 +49,8 @@
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('<button id="new">New Tweets</button>');
+        $body.html('<h1>twittler</h1>');
+        $body.append('<button id="new">New Tweets</button>');
         $body.append('<ul id="tweets"></ul>')
 
         var index = streams.home.length - 1;
@@ -70,7 +76,6 @@
           $('li').show();
           $('#back').remove();
           var streamLen = streams.home.length - 1;
-          var tempIndex = index;
           while(lastIndex < streamLen){
             var tweet = streams.home[lastIndex];
             var $wrap = $('<li class="' + tweet.user + '"></li>');
